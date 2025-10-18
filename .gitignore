@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Input files
+input/**/*
+
+# Output files
+output/**/*
+
+# Input audio files (optional - uncomment to ignore your audio samples)
+# input/*.wav
+# input/*.mp3
+
+# Model cache
+.cache/
+models/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Keep structure folders
+!output/.gitkeep
+!output/wav/.gitkeep
+!output/mp3/.gitkeep
+!input/.gitkeep
+config.py
