@@ -54,7 +54,7 @@ CFG_WEIGHT = 0.5
 # Basso (0.0-0.3) = voce neutra/monotona (es. notizie, annunci)
 # Medio (0.4-0.6) = voce naturale (es. conversazione)
 # Alto (0.7-1.0) = voce molto espressiva (es. narrazione, teatro)
-EXAGGERATION = 0.5
+EXAGGERATION = 0.8
 
 # Penalità per ripetizioni (1.0-3.0)
 # Basso (1.0-1.5) = permette più ripetizioni
