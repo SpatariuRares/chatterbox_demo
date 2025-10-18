@@ -12,7 +12,11 @@ dist/
 build/
 
 # Input files
-input/**/*
+input/**/*.ogg
+input/**/*.mp3
+input/**/*.wav
+input/**/*.txt
+
 
 # Output files
 output/**/*
