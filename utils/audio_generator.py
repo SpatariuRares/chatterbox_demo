@@ -17,7 +17,13 @@ import config
 def generate_audio_chunk(
     model: ChatterboxMultilingualTTS,
     text: str,
-    audio_prompt_path: str
+    audio_prompt_path: str,
+    temperature: Optional[float] = None,
+    cfg_weight: Optional[float] = None,
+    exaggeration: Optional[float] = None,
+    repetition_penalty: Optional[float] = None,
+    min_p: Optional[float] = None,
+    top_p: Optional[float] = None
 ) -> torch.Tensor:
     """
     Generate audio for a single text chunk.
@@ -26,6 +32,12 @@ def generate_audio_chunk(
         model: TTS model instance
         text: Text to synthesize
         audio_prompt_path: Path to audio reference file
+        temperature: Temperature for generation (default: from config)
+        cfg_weight: CFG weight (default: from config)
+        exaggeration: Exaggeration level (default: from config)
+        repetition_penalty: Repetition penalty (default: from config)
+        min_p: Min P value (default: from config)
+        top_p: Top P value (default: from config)
 
     Returns:
         torch.Tensor: Generated audio waveform
@@ -34,12 +46,12 @@ def generate_audio_chunk(
         text,
         language_id=config.LANGUAGE_ID,
         audio_prompt_path=audio_prompt_path,
-        temperature=config.TEMPERATURE,
-        cfg_weight=config.CFG_WEIGHT,
-        exaggeration=config.EXAGGERATION,
-        repetition_penalty=config.REPETITION_PENALTY,
-        min_p=config.MIN_P,
-        top_p=config.TOP_P,
+        temperature=temperature if temperature is not None else config.TEMPERATURE,
+        cfg_weight=cfg_weight if cfg_weight is not None else config.CFG_WEIGHT,
+        exaggeration=exaggeration if exaggeration is not None else config.EXAGGERATION,
+        repetition_penalty=repetition_penalty if repetition_penalty is not None else config.REPETITION_PENALTY,
+        min_p=min_p if min_p is not None else config.MIN_P,
+        top_p=top_p if top_p is not None else config.TOP_P,
     )
 
 
@@ -68,6 +80,12 @@ def generate_single_audio(
     text: str,
     audio_prompt_path: str,
     output_path: Path,
+    temperature: Optional[float] = None,
+    cfg_weight: Optional[float] = None,
+    exaggeration: Optional[float] = None,
+    repetition_penalty: Optional[float] = None,
+    min_p: Optional[float] = None,
+    top_p: Optional[float] = None,
     verbose: bool = True
 ) -> Optional[Path]:
     """
@@ -78,6 +96,12 @@ def generate_single_audio(
         text: Text to synthesize
         audio_prompt_path: Path to audio reference file
         output_path: Path where to save the generated audio
+        temperature: Temperature for generation (default: from config)
+        cfg_weight: CFG weight (default: from config)
+        exaggeration: Exaggeration level (default: from config)
+        repetition_penalty: Repetition penalty (default: from config)
+        min_p: Min P value (default: from config)
+        top_p: Top P value (default: from config)
         verbose: Whether to print progress information
 
     Returns:
@@ -87,7 +111,15 @@ def generate_single_audio(
         print("\nGenerating audio...")
 
     try:
-        wav = generate_audio_chunk(model, text, audio_prompt_path)
+        wav = generate_audio_chunk(
+            model, text, audio_prompt_path,
+            temperature=temperature,
+            cfg_weight=cfg_weight,
+            exaggeration=exaggeration,
+            repetition_penalty=repetition_penalty,
+            min_p=min_p,
+            top_p=top_p
+        )
         save_audio_chunk(wav, model.sr, output_path)
 
         if verbose:
@@ -108,6 +140,12 @@ def generate_chunked_audio(
     output_dir: Path,
     base_filename: str,
     max_chars: int = 500,
+    temperature: Optional[float] = None,
+    cfg_weight: Optional[float] = None,
+    exaggeration: Optional[float] = None,
+    repetition_penalty: Optional[float] = None,
+    min_p: Optional[float] = None,
+    top_p: Optional[float] = None,
     verbose: bool = True
 ) -> List[Path]:
     """
@@ -120,6 +158,12 @@ def generate_chunked_audio(
         output_dir: Directory where to save the chunks
         base_filename: Base name for chunk files (without extension)
         max_chars: Maximum characters per chunk
+        temperature: Temperature for generation (default: from config)
+        cfg_weight: CFG weight (default: from config)
+        exaggeration: Exaggeration level (default: from config)
+        repetition_penalty: Repetition penalty (default: from config)
+        min_p: Min P value (default: from config)
+        top_p: Top P value (default: from config)
         verbose: Whether to print progress information
 
     Returns:
@@ -143,7 +187,15 @@ def generate_chunked_audio(
 
         try:
             # Generate audio for chunk
-            wav = generate_audio_chunk(model, chunk, audio_prompt_path)
+            wav = generate_audio_chunk(
+                model, chunk, audio_prompt_path,
+                temperature=temperature,
+                cfg_weight=cfg_weight,
+                exaggeration=exaggeration,
+                repetition_penalty=repetition_penalty,
+                min_p=min_p,
+                top_p=top_p
+            )
 
             # Save chunk
             chunk_filename = f"{base_filename}_chunk{i:03d}.wav"
